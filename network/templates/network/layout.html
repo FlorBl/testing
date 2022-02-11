@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Social Network{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/493ea5c692.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'network/responsive.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="welcomeDiv">
+         <div class="firstDiv">
+    <article class="leftSide aWidth smallerWidth">
+        {% if user.is_authenticated %}
+                <i id="globe" class="fas fa-globe-americas show"></i>
+            <h4><a class="nav-link" href="{% url 'logout' %}"><i class="show m fas fa-sign-out-alt fa-sm"></i>Log out</a></h4>
+            <h4><a class="nav-link" href="{% url 'index' %}"><i  class="show m fas fa-home fa-sm"></i>Home</a></h4>
+             <h4><a class="nav-link" href="{% url 'test' %}"><i  class="show m far fa-bell fa-sm" ></i>Notifications</a></h4>   
+             <h4 ><a class="nav-link" href="{% url 'profile' user.username %}"><i style="color:rgb(60,64,68);" class="show m far fa-user fa-sm"></i><span class="underline">Profile</span></a></h4>
+            <h4 ><a class="nav-link" href="{% url 'profile' user.username %}"><i style="color:rgb(60,64,68);" class="show m fas fa-paper-plane fa-sm ab" style="backgound-color:rgb(15,154,251);"></i><span class="underline"></span></a></h4>
+            <a class="postSide" style="width:100%;height:100%;border-radius:40px;background-color:rgb(29,155,240);color:whitesmoke;padding:10px 50px;outline:none;font-weight:700;font-size:large;">Post</a>
+            <div class="prof" style="margin-right:50px;position:fixed;bottom:2%;">
+            <img style="position: absolute;top: margin:40px" class="picture show" src="{{ username.profile_image.url }}">
+            <span style="left:50px;position:relative;"><p>{{username.username}}<br>@{{username.username}}</p>
+            </div>
+        {% else %}
+    <article class="leftSide">
+        <i id="globe" class="fas fa-globe-americas"></i>
+        <h4  onclick="popup()"><i style="padding-right:5px;color:gray;font-size:large;" class="fas fa-hashtag fa-sm"></i>Explore</h4>
+        <h4  onclick="popup()"><i style="padding-right:5px;color:gray;font-size:large;" class="fas fa-cog fa-sm"></i>Settings</h4>
+    </article>
+
+        {% endif %}
+
+    </article>
+
+    </div> <!--Left Div-->  
+
+
+        {% block body %}
+        {% endblock %}
+
+    <div class="rightDiv2 smallerWidth">
+            <article class="searchArticle">
+                <input type="text" class="inputS articleOneInput" placeholder="&#xF002; Search Network" >
+            </article>
+            
+            <article class="articleTop">
+        
+            <article style="padding:0px 5px 20px 20px;position: relative;" >
+                <a href="https://globalgoodness.ca/en/a-machine-that-recycles-waste-back-to-life/?gclid=EAIaIQobChMI_Lv_2dfP9QIVm_bjBx29dAkIEAAYASAAEgI04vD_BwE" target="_blank" rel="">
+                <p class="articleTitle">Environment </p>
+                <h5 class="articleInfo">A machine that recycles waste back to life</h5>
+                <img class="articleImage" src="{% static 'network/news.jpg' %}">
+                </a>
+            </article>
+
+            <article style="padding:0px 5px 20px 20px;position: relative;">
+            <a href="https://globalgoodness.ca/en/total-artificial-hearts-approved-in-europe/?gclid=EAIaIQobChMI2crmtdjP9QIVfMiUCR0e7Ql0EAAYASAAEgIwJ_D_BwE" target="_blank" rel="">
+                <p class="articleTitle">Health</p>
+                <h5 class="articleInfo">TOTAL artificial heart approved in Europe</h5>
+            </a>
+            </article>
+
+                <article style="padding:0px 5px 20px 20px;position: relative;">
+                            <a href="https://globalgoodness.ca/en/zero-emission-aircraft/" target="_blank" rel="">
+                <p class="articleTitle">Technology</p>
+                <h5 class="articleInfo">ZERO-emission aircraft</h5>
+                            </a>
+            </article>
+            {% if user.is_authenticated%}
+
+                {% else %}
+                <article style="padding:0px 5px 20px 20px;position: relative;">
+                <a href="https://globalgoodness.ca/en/u-feel-an-electric-bike-wth-no-battery/?gclid=EAIaIQobChMI5sL-jtnP9QIVRIJbCh3_pwKaEAAYASAAEgLyyPD_BwE" target="_blank" rel="">
+                <p class="articleTitle">Technology</p>
+                <h5 class="articleInfo">U-Feel: An Electric Bike With No Battery </h5>
+
+                </a>
+            </article>
+            {% endif %}
+            {% if user.is_authenticated %}
+             <article class="suggestion" style="padding:1px 5px 1px 20px;position: relative;border-top:40px solid white;">
+                    <h5>Who to follow</h5>
+                        {% for i in suggestionList %}
+                    <div class="demo">
+                        <span><img class="suggestionPic"  src="{{ i.profile_image.url }}"></span>
+                        <span class="middle"><strong>{{i}}</strong><br> <p style="padding-left:8px;">@{{i}}</p></span>
+                        <span>
+                        {% if is_following > 0 %}
+                            <butt on id="btnfollow" data-id="{{i.id}}" type="button"  style="background-color:rgb(15,20,25);float:right;color:whitesmoke;font-weight:bold;padding:3px 15px;border-radius:50px;">Following</button>
+                            {% else %}
+                            <button id="btnfollow" data-id="{{i.id}}" type="button"  style="background-color:rgb(15,20,25);float:right;color:whitesmoke;font-weight:bold;padding:3px 15px;border-radius:50px;">Follow</button>
+                            {% endif %}
+                            
+                        </span>
+                    </div>
+                        {% endfor %}
+
+            </article>
+            {% endif %}
+        </article>
+</div>
+    </div>
+
+<div id="settings">
+       <i id="closeSettings" class="fas fa-times"></i>
+
+    <div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i>
+    </div>
+
+    <h4>Create your account!</h4>
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        
+    <form action="{% url 'register' %}" method="post" class = "card-body">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Register">
+    </form>
+</div>
+
+
+
+
+<!-- PopUp Window to show Following -->
+<div id="followingJs">
+   <i id="closeX" class="fas fa-times"></i>
+
+<div id="content">
+    {% for user in followingList %}
+        <div class="profilePic">
+            <img class="picture"  src="{{ user.following.profile_image.url }}">
+        </div>
+    <div class="card">
+        <div class="card-body">
+
+
+            <h5 class="card-title"><a href="{% url 'profile' user.following %}">{{user.following}}</a> <i class="fas fa-check-circle"></i></h5>
+            
+
+            <p class="card-text">
+                <div style="margin-right:7%;" class="card-link">&nbsp<small class="text-muted">Bio</small>
+                </div>
+
+            </p>
+        </div>
+    </div>
+    {% empty %}
+    <h2>Not following anyone yet..</h2>
+    {% endfor %}
+</div>
+</div>
+<!---->
+
+
+
+<!-- PopUp Window to show Followers -->
+<div id="followersJs">
+   <i id="closeX2" class="fas fa-times"></i>
+
+<div id="content">
+    {% for user in followersList %}
+        <div class="profilePic">
+            <img class="picture"  src="{{ user.follower.profile_image.url }}">
+        </div>
+    <div class="card">
+        <div class="card-body">
+
+
+            <h5 class="card-title"><a href="{% url 'profile' user.follower %}">{{user.follower}}</a> <i class="fas fa-check-circle"></i></h5>
+          
+            <p class="card-text">
+                <div style="margin-right:7%;" 
+                    class="card-link">&nbsp<small
+                    class="text-muted">Bio</small>
+                </div>
+
+            </p>
+        </div>
+    </div>
+    {% empty %}
+    <h2>No followers yet..</h2>
+    {% endfor %}
+</div>
+</div>
+
+
+<!-- PopUp Window to show Followers -->
+<div id="profileEdit">
+    <div style="display: flex;">
+        <i id="closeX3" class="fas fa-times" style="margin-left:15px;"></i>
+        <h5 style="-ms-flex: 1;flex:1; margin:5px 15px 30px 40px;">Edit Profile</h5>
+
+        
+</div><!-- Center Div --> 
+
+<div>
+    <div class="main">
+            <div class="cover">
+                <form id="formID" action="{% url 'updateInfo' %}" method="post" class="card-body" enctype="multipart/form-data">
+                 {% csrf_token %}
+                <img onclick="document.getElementById('file-uploadC').click()" src="{{ user_profile.cover_image.url }}" />
+                <i class="fas fa-camera centered" style="font-size:large;padding:10px;border-radius:50px;background-color:rgb(56,45,39);color:rgb(188,182,180);">
+                </i>
+            </div>
+
+            <div class="profile">
+                    <img onclick="document.getElementById('file-uploadB').click()" src="{{ user_profile.profile_image.url }}">
+            </div>  
+            
+     </div>
+
+        <div style="margin:60px 15px 0px 15px;" class="form-group">
+            <textarea  rows="4" class="form-control" autofocus type="text" name="bio" placeholder="Bio"></textarea>
+        </div>
+
+
+
+
+
+        <div class="form-group" hidden>
+            <label for="file-uploadB" class="custom-file-upload" style="color:black;">
+                <i class="fas fa-upload"></i>
+            </label>
+            <input id="file-uploadB" type="file" name="image">
+        </div>
+        
+        <div class="form-group" hidden>
+            <label for="file-uploadC" class="custom-file-upload" style="color:black;">
+                <i class="fas fa-upload"></i>
+            </label>
+            <input id="file-uploadC" type="file" name="cover">
+        </div>
+
+        <input id="saveButton" class="welcomeBtn btnA" type="submit" value="Save" style="background-color:rgb(15,20,25);margin:15px;">
+
+    </form>
+
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="{% static 'network/library.js' %}"></script>
+<script src="{% static 'network/welcome.js' %}"></script>
+<script src="{% static 'network/mobile.js' %}"></script>
+<script src="{% static 'network/profile.js' %}"></script>
+
+<script src="https://kit.fontawesome.com/cbf89bcdb7.js" crossorigin="anonymous"></script>
+</html>

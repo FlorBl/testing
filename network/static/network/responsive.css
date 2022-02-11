@@ -1,0 +1,79 @@
+@media only screen and (max-width: 1005px) {
+
+    .smallerWidth{
+        visibility: hidden;
+
+    }
+    .show{
+        visibility: visible;
+        font-size: 150%;
+        color:rgb(60,64,68);
+        padding-right:15%;
+    }
+    .welcomeDiv{
+    display: grid;  
+    grid-template-columns: 12vw 77vw 1vw;  
+    grid-template-rows: 100vh;
+}
+    #globe{
+        font-size: x-large;
+        margin-left: 8%;
+    }
+    .postSide{
+        color:rgb(15,154,251);
+    }
+    #homeTitle{
+        width: 77vw;
+        padding:5px;
+        position:relative;
+        backdrop-filter: blur(16px);
+        z-index: 1000;
+        position:fixed;
+
+    }
+    .ab{
+        visibility: visible;
+    }
+    .prof{
+       left:5;
+       bottom:0;
+    }
+    .m{
+        all:initial;
+    }
+}
+
+
+@media only screen and (min-width: 1005px) {
+    #forSmallerWidth{
+        visibility: hidden;
+    }
+    #homeTitle{
+        width: 37%;
+        position:relative;
+        backdrop-filter: blur(16px);
+        z-index: 1000;
+        position:fixed;
+        padding:5px;
+        margin-bottom: 10%;
+
+    }
+    .ab{
+        visibility: hidden;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    #leftWelcomeDiv{
+        visibility: hidden;
+        width: 0%;
+    }
+    #rightWelcomeDiv{
+        visibility: visible;
+        width: 100vw;
+        height: 100vh;
+        margin:0 auto;
+
+    }
+    
+}

@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}Social Network{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/493ea5c692.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'network/responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'network/responsive.css' %}" rel="stylesheet">
+
+</head>
+<body>
+<div class="mainDiv">
+    <div id="leftWelcomeDiv" class="left">
+        
+         <img src="{% static 'network/4a.jpg' %}">
+    </div>
+
+    <div id="rightWelcomeDiv" class="right">
+        <div id="options">
+            <i class="fas fa-globe-americas"></i>
+            <h1>Around the World </h1>
+            <h2>Join the platform today.<h2>
+
+                <a id="first" class="welcomeBtn" onclick="registerIndex()">Sign up with email</a>
+                <p style="margin-left:5%;width:auto;text-align:center;max-width:50%;">By signing up, you agree to the <br>Terms of Service and Privacy Policy, including Cookie Use.</p>
+                <h5>Already have an account?</h5>
+                <a id="second" class="welcomeBtn" onclick="loginIndex()">Sign In</a>
+        </div>
+    </div>
+</div>
+<!--Pop up form-->
+
+    
+<!--Pop up Register Form-->
+
+<div id="lightboxo">
+   <i id="x" class="fas fa-times"></i><div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i></div>
+    <h4>Create your account!</h4>
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        
+    <form action="{% url 'register' %}" method="post" class = "card-body" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+
+
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Register">
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="lightbox2">
+
+   <i id="x2" class="fas fa-times"></i><div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i></div>
+    <h4 id="singIn">Log In</h4>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post" class = "card-body">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Login">
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- PopUp Window to show Followers -->
+<div id="registerIndex">
+   <i id="closeX3" class="fas fa-times"></i>
+ <h4>Create your account!</h4>
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        
+    <form action="{% url 'register' %}" method="post" class = "card-body" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+
+        <div class="form-group">
+
+            <label for="file-upload" class="custom-file-upload">
+                <i class="fas fa-upload"></i> Profile Picture
+            </label>
+
+            <input id="file-upload" type="file" name="image">
+
+        </div>
+
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Register">
+    </form>
+
+</div>
+
+
+
+<!-- PopUp Login Form -->
+<div id="loginIndex">
+   <i id="closeX4" class="fas fa-times"></i>
+    <h4 id="singIn">Log In</h4>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post" class = "card-body">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Login">
+    </form>
+</div>
+
+<script src="{% static 'network/welcomeA.js' %}"></script>
+</body>

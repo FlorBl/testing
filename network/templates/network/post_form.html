@@ -1,0 +1,21 @@
+{% if user.is_authenticated %}
+<div style="padding-top:10px;">
+
+    <div>
+        <form action="{% url 'postmessage' %}" method="post" style="width:100%;">
+            {% csrf_token %}
+            <div class="form-group" style="float:right;width:100%;">
+                <label for="post_text" class="h4 home"></label>
+
+                {{ form.post_text }}
+            <div style="margin-right:50px; border:1px solid red;">
+            <img style="position: absolute;top: margin:40px;margin-left:1%;" class="picture" src="{{ username.profile_image.url }}">
+            </div>
+            <button style="font-size:medium;font-weight:bold;float:right;padding:5px 15px;border-radius:25px;background-color:rgb(15,154,251);float:bottom;" type="submit" class="btn btn-primary btn-sm" id="submitPost">Post</button>
+        </div>
+        </form>
+</div>
+
+</div>
+<hr>
+{%endif%}

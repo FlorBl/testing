@@ -1,0 +1,127 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+<div class="mainA"><!-- Center Div --> 
+
+    <div class="main">
+
+        <div class="cover">
+        <img src="{{ user_profile.cover_image.url }}" />
+        </div>
+
+        <div class="profile">
+            <img src="{{ user_profile.profile_image.url }}">
+        </div>  
+
+    </div> <!-- Background Image -->
+
+<div class="card">
+    
+    <div class="card-body">
+         {% if user.is_authenticated and user.id == user_profile.id %}
+                 <button onclick="editProfile()" id="editProfile">Edit Profile</button>
+         {% else %}
+
+        {% endif %}
+
+        <h5 class="card-title profileName">
+            {{user_profile.username}}
+             <i class="fas fa-check-circle"></i>
+        </h5>
+
+        <p class="card-text largeFont"><small class="text-muted">@{{user_profile.username}}</small></p>
+        <article>{{user_profile.bio}}!</article>
+
+        <br>
+
+        <p class="card-text"><strong id="sp_following">{{total_following}}</strong>
+            <span onclick="showFollowing()">Following</span>
+
+        <strong id="sp_followers">{{total_followers}}</strong> <span onclick="showFollowers()">Followers</span>
+        <p class="card-text"><small class="text-muted"></small></p>
+
+        {% if user.is_authenticated and user.id != user_profile.id %}
+        <p class="card-text">
+        {% if is_following > 0 %}
+            <button id="btnfollow" data-id="{{user_profile.id}}" type="button" class="followBtn">Following</button>
+        {% else %}
+            <button id="btnfollow" data-id="{{user_profile.id}}" type="button" class="followBtn" style="background-color:rgb(15,20,25);">Follow</button>
+        {%endif%}
+        </p>
+        {%endif%}
+    </div>
+</div>
+<!--__________________________________________________________________-->
+<div id="content" >
+    {% for post in posts %}
+    <div class="separator">
+        <div class="profilePic">
+            <img class="picture"  src="{{ user_profile.profile_image.url }}">
+        </div>
+    <div class="card">
+        <div class="card-body">
+
+
+            <h5 class="card-title"><a href="{% url 'profile' post.user.username %}">{{post.user.username}}</a> <i class="fas fa-check-circle"></i></h5>
+            {%if post.user_id == user.id %}
+            <a href="#" class="card-link editIcon" id="edit_link_{{post.id}}" data-id="{{post.id}}" data-toggle="modal"><i class="far fa-edit"></i></a>
+            {%endif%}
+            <p class="card-text" id="post_text_{{post.id}}"> {{ post.text }}</p>
+            <form action="#" method="POST" id="frm_edit_{{post.id}}" data-id="{{post.id}}" style="display: none">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form_edit.id_post_edit_text }}
+                </div>
+                <div id="post_text_alert_{{post.id}}">
+                </div>
+                <div id="div_buttons">
+                <button type="button" data-id="{{post.id}}" id="btn_close_{{post.id}}" class="btn btn-secondary"
+                    data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="btnSave">Save changes</button>
+                </div>
+            </form>
+
+            <p class="card-text postDate"><small class="text-muted">{{post.post_date}}</small></p>
+            <p class="card-text">
+                <div data-id="{{post.id}}"
+                    class="card-link heartIcon {% if post.current_like > 0 %} fas {%else%} far {% endif %} fa-heart">&nbsp<small
+                    class="text-muted">{{post.like_set.count}}</small>
+                </div>
+                <div data-id="{{post.id}}"
+                    class="postIcons card-link fas fa-retweet">&nbsp<small
+                    class="text-muted">0</small>
+                </div>
+                <div data-id="{{post.id}}"
+                    class="postIcons card-link far fa-comment-alt">&nbsp<small
+                    class="text-muted">0</small> 
+                </div>
+                <div data-id="{{post.id}}"
+                    class="postIcons card-link fas fa-external-link-alt">&nbsp<small
+                    class="text-muted">0</small>
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+    {% empty %}
+    <h5 class="noPosts">No posts</h5>
+    {% endfor %}
+</div>
+
+</div> <!-- Center Div ends Here-->
+
+
+
+
+
+
+
+
+
+<script src="{% static 'network/following.js' %}"></script>
+<script src="{% static 'network/profile.js' %}"></script>
+
+
+{% load static %}
+
+{% endblock %}

@@ -1,0 +1,69 @@
+1. Add user Bio option.
+2. Add user image upload option
+3. Add notifications.
+
+
+
+username: 1
+id: 1
+
+
+select * from network_follower where following_id = 1; 
+(Shows the users that this id follows)
+
+select * from network_post where user_id = 1;
+(Shows all the posts of the user of that id)
+
+select * from network_post where id = 1;
+(Shows the post with id = 1)
+
+select * from network_like where post_id = 1; 
+(shows the likes of that post)
+
+select username from network_user where id = 1;
+(Shows the username belonging to that id)
+
+Table: Network_Like
+| id | post_id | user_id |
++----+---------+---------+
+| 1  | 1       | 1       |
+| 2  | 1       | 2       |
+| 3  | 1       | 3       |
+| 4  | 1       | 5       |
+| 9  | 1       | 7       |
+| 12 | 1       | 15      |
+| 13 | 1       | 16      |
+
+
+select username from network_user where id = 1;
+
+f'{user_id} liked your post {post_id}'
+
+
+---------
+
+
+
+select profile_image from network_user where username = 'Michael Scott';
+
+
+
+posts = Post.objects.filter().order_by('-post_date').annotate(current_like=Count(likes.values('id')))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

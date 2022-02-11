@@ -1,0 +1,18 @@
+ <article class="suggestion" style="padding:1px 5px 1px 20px;position: relative;border-top:40px solid white;">
+                    <h5>Who to follow</h5>
+                        {% for i in suggestionList %}
+                    <div class="demo">
+                        <span><img class="suggestionPic"  src="{{ i.profile_image.url }}"></span>
+                        <span class="middle"><strong>{{i}}</strong><br> <p style="padding-left:8px;">@{{i}}</p></span>
+                        <span>
+                        {% if is_following > 0 %}
+                            <butt on id="btnfollow" data-id="{{i.id}}" type="button"  style="background-color:rgb(15,20,25);float:right;color:whitesmoke;font-weight:bold;padding:3px 15px;border-radius:50px;">Following</button>
+                            {% else %}
+                            <button id="btnfollow" data-id="{{i.id}}" type="button"  style="background-color:rgb(15,20,25);float:right;color:whitesmoke;font-weight:bold;padding:3px 15px;border-radius:50px;">Follow</button>
+                            {% endif %}
+                            
+                        </span>
+                    </div>
+                        {% endfor %}
+
+            </article>

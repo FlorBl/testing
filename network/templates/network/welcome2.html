@@ -1,0 +1,171 @@
+{% extends "network/layout.html" %} 
+{% load static %}
+{% block nav %}
+{% endblock %}
+
+{% block body %}
+
+    <div>
+        <div class="middleDiv"><img src="{% static 'network/15.jpg' %}"></div>
+        <div class="infoDiv">
+            <div>
+            {% for post in posts %}
+                {% if forloop.first %}
+            <h5 id="h5" style="width:fit-content;padding-top:10px" class="card-title"><span>{{post.user.username}}</span> <i class="fas fa-check-circle"></i></h5>
+            <p class="card-text" style="font-size:large;"><small class="text-muted">@{{post.user.username}}</small></p>
+                {% endif %}
+            {% endfor %}
+        <article>Welcome to our platform, got anything wandering in your mind? Well, this is the place!</article>
+        <br>
+        <button  onclick="popup()" class="followBtn">Follow</button>
+        <p><strong>{{total_following}}</strong> Following <strong>{{total_followers}}</strong> Followers</p> 
+            </div>
+    </div>
+
+    <div class="tweets">
+        <div id="posts">
+            {% for post in posts %}
+        <div class="singlePost">
+                <div class="profilePic">
+                    <img class="picture"  src="{% static 'network/15.jpg' %}">
+                </div>
+            <div class="card">
+                <div class="card-body" onclick="popup()">
+                    <h5 style="width:fit-content;" class="card-title"><a href="#">{{post.user.username}}</a> <i class="fas fa-check-circle"></i></h5>
+                <p style="  position: absolute;top: 8px; right: 16px;" class="card-text"><small class="text-muted">{{post.post_date}}</small></p>
+                    <p class="card-text" id="post_text_{{post.id}}"> {{ post.text }}</p>
+                    <p class="card-text">
+
+                        <div data-id="{{post.id}}" style="margin-right:4%"
+                            class="postIcons card-link {% if post.current_like > 0 %} fas {%else%} far {% endif %} fa-heart">&nbsp<small
+                                class="text-muted">{{post.like_set.count}}</small>
+                                </div>
+
+                        <div data-id="{{post.id}}"
+                            class="postIcons card-link fas fa-retweet">&nbsp<small
+                                class="text-muted">0</small>
+                                </div>
+
+                            <div data-id="{{post.id}}"
+                            class="postIcons card-link far fa-comment-alt">&nbsp<small
+                                class="text-muted">0</small> 
+                                </div>
+                            <div data-id="{{post.id}}"
+                            class="postIcons card-link fas fa-external-link-alt">&nbsp<small
+                                class="text-muted">0</small>
+                                </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+            {% endfor %}
+        </div>
+            </div>
+            </div>
+
+        <div  id="welcomebtnz" >
+        <div>
+                <h5 class="leftSpace" style="margin-top:10px;">New to Global?</h5>
+                <p class="leftSpace">Sign up now to get your own personalized timeline!</p>
+                <a id="first" class="welcomeBtn btnz" onclick="register()">Sign up with email</a>
+                <a id="second" onclick="login()" class="welcomeBtn btnz">Sign In</a>
+                <p class="leftSpace">By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.</p>
+        </div>
+        <div class="rightDiv"  onclick="popup()">
+            
+                <div><img src="{% static 'network/1.jpg' %}"></div>
+                <div><img src="{% static 'network/2.jpg' %}"></div>
+                <div><img src="{% static 'network/3.jpg' %}"></div>
+                <div><img src="{% static 'network/4.jpg' %}"></div>
+                <div><img src="{% static 'network/5.jpg' %}"></div>
+                <div><img src="{% static 'network/6.jpg' %}"></div>
+                
+        </div>
+        
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!--Pop up Register Form-->
+
+<div id="lightbox">
+   <i id="x" class="fas fa-times"></i><div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i></div>
+    <h4>Create your account!</h4>
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        
+    <form action="{% url 'register' %}" method="post" class = "card-body" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+
+        <div class="form-group">
+
+            <label for="file-uploadB" class="custom-file-upload" style="color:black;">
+                <i class="fas fa-upload"></i> Profile
+            </label>
+
+            <input id="file-uploadB" type="file" name="image" required>
+            
+        </div>
+
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Register">
+    </form>
+</div>
+
+
+<!--Pop up Login Form-->
+<div id="lightbox2">
+
+   <i id="x2" class="fas fa-times"></i><div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i></div>
+    <h4 id="singIn">Log In</h4>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post" class = "card-body">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        
+        <input id="registerBtn" class="welcomeBtn" type="submit" value="Login">
+    </form>
+
+</div>
+
+
+
+<!--Pop up Miss Out Form-->
+<div id="lightbox3">
+   <i id="x3" class="fas fa-times"></i>
+   <div id="outer"><i id="singupIcon" class="fas fa-globe-americas"></i></div>
+    <h5 id="singIn">Don't miss what's happening</h5>
+    <p>Be stay connected with your fellow humans.</p>
+    <button id="login" class="welcomeBtn" onclick="login()" type="submit">Login</button>
+    <button id="register" class="welcomeBtn" onclick="register()" type="submit">Register</button>
+
+</div>
+<script src="{% static 'network/welcome.js' %}"></script>
+{% load static %}
+
+{% endblock %}
