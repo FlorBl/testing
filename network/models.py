@@ -5,7 +5,7 @@ import datetime
 
 class User(AbstractUser):
     profile_image = models.ImageField(null=True, blank=True, upload_to="images/")
-    cover_image = models.ImageField(null=True, blank=True, upload_to="cover/",default="cover/network.jpg")
+    cover_image = models.ImageField(null=True, blank=True, upload_to="cover/",default="cover/jaguar.jpg")
     bio = models.CharField(max_length=100, blank=True,default='Hello, im new!')
     
 class Post(models.Model):
