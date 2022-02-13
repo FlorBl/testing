@@ -20,7 +20,7 @@
                         {%if post.user_id == user.id %}
                         <a href="#" class="card-link editIcon" id="edit_link_{{post.id}}" data-id="{{post.id}}" data-toggle="modal"><i class="far fa-edit"></i></a>
                         {%endif%}
-                        <p class="card-text" id="post_text_{{post.id}}" style="line-height: 1;"> {{ post.text }}</p>
+                        <p class="card-text" id="post_text_{{post.id}}" style="line-height: 1;"> {{ post.text }} {{post.user.profile_image.url}}</p>
                         <form action="#" method="POST" id="frm_edit_{{post.id}}" data-id="{{post.id}}" style="display: none">
                             {% csrf_token %}
 

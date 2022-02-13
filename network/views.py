@@ -38,14 +38,16 @@ def welcome(request):
 
 def welcome2(request):
     posts = Post.objects.order_by('-post_date').all()
+    print(f'Post are: {posts}')
     paginator = Paginator(posts, MAX_POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
     for user in posts:
         x = user.user_id
-    profile_user = x
-    print(f'\n\n\n\n\n\n{profile_user}')
+        print(f'Value of x is {x}')
+        profile_user = x
+        
     total_following = Follower.objects.filter(follower=profile_user).count()
     total_followers = Follower.objects.filter(following=profile_user).count()
     
