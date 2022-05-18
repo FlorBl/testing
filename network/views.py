@@ -92,6 +92,7 @@ def index(request):
         
         for i in followSuggestions:
             is_following = Follower.objects.filter(follower=user, following=i).count()
+
     else:
         posts = Post.objects.order_by('-post_date').all()
 
@@ -102,7 +103,7 @@ def index(request):
         'posts': page_obj,
         'form': NewPostForm(),
         'form_edit': NewEditPostForm(),
-        'suggestionList': suggestionList[0:3],
+        'suggestionList': random.choices(suggestionList, k=3),
         "is_following": is_following
     })
 
