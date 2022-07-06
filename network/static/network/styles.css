@@ -14,6 +14,10 @@ a:hover { color: inherit; }
 
 
 /* Welcome.html */
+.popUpHeaders{
+      display: table;
+  margin: 0 auto;
+}
 .welcomeBtn{
     display: block;
     font-size:large;
@@ -596,6 +600,7 @@ margin-top:2%;
 
 
 #followersJs, #profileEdit, #registerIndex, #loginIndex{
+    border:1px solid red;
     visibility: hidden;
     border-radius: 20px;
     color:black;
@@ -603,7 +608,7 @@ margin-top:2%;
     height: fit-content;
     max-width:600px;
     min-width: 400px;
-    max-height: 65vh;
+    max-height: 85vh;
     background-color: white;
 
     position: absolute;
@@ -622,7 +627,7 @@ margin-top:2%;
 
 }
 
-#closeX2, #closeX3{
+#closeX2, #closeX3, #closeX4{
     padding: 8px;
 }
 
@@ -738,7 +743,8 @@ input[type="file"] {
 }
 .cover{
     display:block;
-    max-height:30vh;
+    min-height:30vh;
+    max-height: 31vh;
     overflow:hidden;
     z-index:1;
 }

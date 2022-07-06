@@ -10,6 +10,8 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator
 import time
 import random
+import json
+
 
 MAX_POSTS_PER_PAGE = 10
 
@@ -34,7 +36,17 @@ class EditBio(forms.Form):
         {'rows': '3', 'maxlength': 160, 'class': 'form-control', 'placeholder': "What's happening?", 'id': 'edit_bio'}), label="New Bio", required=True)
     
 def welcome(request):
-    return render(request, "network/welcome.html")
+    usernames = []
+    emails = []
+    userz = User.objects.all()
+    for i in userz:
+        usernames.append(i.username)
+        emails.append(i.email)
+    
+    print(f'This is the usernames list {usernames}')
+    print(f'This is the emails list {emails}')
+    
+    return render(request, 'network/welcome.html',context={'TESTING':usernames, 'EMAILS':emails})
 
 def welcome2(request):
     posts = Post.objects.order_by('-post_date').all()
@@ -45,7 +57,6 @@ def welcome2(request):
     
     for user in posts:
         x = user.user_id
-        print(f'Value of x is {x}')
         profile_user = x
         
     total_following = Follower.objects.filter(follower=profile_user).count()
@@ -65,6 +76,7 @@ def index(request):
         likes = Like.objects.filter(post=OuterRef('id'), user_id=user)
         posts = Post.objects.filter().order_by(
             '-post_date').annotate(current_like=Count(likes.values('id')))
+
         
         #List of who the current user follows:
         currentUser = Follower.objects.filter(follower_id=user)
@@ -99,11 +111,11 @@ def index(request):
     paginator = Paginator(posts, MAX_POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, "network/index.html", {'username':username,
+    return render(request, "network/index.html", {      'username':username,
         'posts': page_obj,
         'form': NewPostForm(),
         'form_edit': NewEditPostForm(),
-        'suggestionList': random.choices(suggestionList, k=3),
+        'suggestionList': random.sample(suggestionList, 3),
         "is_following": is_following
     })
 
@@ -230,6 +242,34 @@ def profile(request, username):
         
         postz = Post.objects.filter(user_id__in=followers.values('following_id')).order_by(
         '-post_date').annotate(current_like=Count(likes.values('id')))
+        '''
+        '''
+                #List of who the current user follows:
+        currentUser = Follower.objects.filter(follower_id=logged_user)
+
+        #Create an empty list with then copy the results
+        userFollowing = []
+        for i in currentUser:
+            userFollowing.append(i.following_id)
+
+
+        #Create a list for users
+        userList=[]
+
+        users = User.objects.all()
+        for i in users:
+            userList.append(i.id)
+
+
+        #Create a new List without same elements
+        followSuggestions = [x for x in userList if x not in userFollowing]
+        suggestionList = []
+        for i in followSuggestions:
+            x = User.objects.get(id=i)
+            suggestionList.append(x)
+        
+        for i in followSuggestions:
+            is_following = Follower.objects.filter(follower=logged_user, following=i).count()
     else:
         posts = Post.objects.filter(
             user=profile_user).order_by('post_date').all()
@@ -243,9 +283,16 @@ def profile(request, username):
     paginator = Paginator(posts, MAX_POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, "network/profile.html", { "followersList": followersList,"followingList": followingList,
-     "user_profile": profile_user, "posts": page_obj, "is_following": is_following, 'total_following': total_following, 'total_followers': total_followers,
-     "username":username,'form': NewPostForm(), 'form_edit': NewEditPostForm()
+    return render(request, "network/profile.html", { "followersList": followersList,
+    "followingList": followingList,
+     "user_profile": profile_user, 
+     "posts": page_obj, 
+     "is_following": is_following, 
+     'total_following': total_following, 
+     'total_followers': total_followers,
+     "username":username,
+     'suggestionList': random.sample(suggestionList, 3),
+     'form': NewPostForm(), 'form_edit': NewEditPostForm()
     })
 
 
@@ -265,7 +312,7 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "network/login.html", {
+            return render(request, "network/welcome.html", {
                 "message": "Invalid username and/or password."
             })
     else:
@@ -293,7 +340,8 @@ def register(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username, email, password, profile_image=profile_image)
+            user = User.objects.create_user(username, email, password, profile_image=profile_image,cover_image='/images/jaguar.jpg')
+            print(profile_image)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -308,9 +356,9 @@ def register(request):
 
 # Testing
 def test(request):
+    is_following = 0
     if request.user.is_authenticated:
         user = request.session['_auth_user_id']
-        print(f'ID of logged user is: {user}')
         username = User.objects.get(id=user)
         followingList = Follower.objects.filter(follower=int(user))
         # Saving a QuerySet of User's Followers
@@ -318,6 +366,35 @@ def test(request):
         likes = Like.objects.filter(post=OuterRef('id'), user_id=user)
         posts = Post.objects.filter().order_by(
             '-post_date').annotate(current_like=Count(likes.values('id')))
+        
+        '''
+        '''
+        #List of who the current user follows:
+        currentUser = Follower.objects.filter(follower_id=user)
+
+        #Create an empty list with then copy the results
+        userFollowing = []
+        for i in currentUser:
+            userFollowing.append(i.following_id)
+
+
+        #Create a list for users
+        userList=[]
+
+        users = User.objects.all()
+        for i in users:
+            userList.append(i.id)
+
+
+        #Create a new List without same elements
+        followSuggestions = [x for x in userList if x not in userFollowing]
+        suggestionList = []
+        for i in followSuggestions:
+            x = User.objects.get(id=i)
+            suggestionList.append(x)
+        
+        for i in followSuggestions:
+            is_following = Follower.objects.filter(follower=user, following=i).count()
     else:
         posts = Post.objects.order_by('-post_date').all()
 
@@ -325,12 +402,16 @@ def test(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/test.html", {
+        "username":username,
         'posts': page_obj,
         'form': NewPostForm(),
         'form_edit': NewEditPostForm(),
         "followingList": followingList,
         "followersList":followersList,
-        "username":username
+        ###
+        'suggestionList': random.sample(suggestionList, 3),
+        "is_following": is_following
+        ###
     })
     
     
@@ -339,13 +420,22 @@ def updateInfo(request):
         id = request.session['_auth_user_id']
         updateUser = User.objects.get(id=id)
         
-        newCover = request.FILES['cover']
+        newCover = request.FILES['cover'] if 'cover' in request.FILES else False
+        
         newBio = request.POST["bio"]
         
-        updateUser.bio = newBio 
-        updateUser.cover_image = newCover
-            
-        updateUser.save()
+        if newBio:
+            updateUser.bio = newBio
+            updateUser.save()
+        else:
+            pass
+        
+        if newCover:
+            updateUser.cover_image = newCover
+            updateUser.save()
+        else:
+            pass
+
 
     return HttpResponseRedirect(reverse("profile", args=(updateUser.username,)))
 
@@ -355,6 +445,20 @@ def Suggest(request):
     if request.user.is_authenticated:
         id = request.session['_auth_user_id']
     
-    return render(request, "network/testing.html", {
+    return render(request, "network/test.html", {
         'suggestionList':suggestionList
         })
+
+
+
+# Testing for AJAX
+def testing(request):
+    usernames = []
+    userz = User.objects.all()
+    for i in userz:
+        usernames.append(i.username)
+    
+    print(f'This is the usernames list {usernames}')
+
+    return render(request, 'network/testing.html',{'tes':usernames})
+
