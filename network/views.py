@@ -42,7 +42,6 @@ def welcome(request):
     for i in userz:
         usernames.append(i.username)
         emails.append(i.email)
-    
 
     
     return render(request, 'network/welcome.html',context={'TESTING':usernames, 'EMAILS':emails})
