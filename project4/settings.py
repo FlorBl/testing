@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
+import django_on_heroku
 import dj_database_url
 from decouple import config
 
@@ -86,6 +86,9 @@ DATABASES = {
     }
 }
 
+prod_db  =  dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(prod_db)
+
 
 AUTH_USER_MODEL = "network.User"
 
@@ -140,4 +143,4 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # until here
-django_heroku.settings(locals())
+django_on_heroku.settings(locals())
