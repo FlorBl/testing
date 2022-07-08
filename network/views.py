@@ -43,14 +43,12 @@ def welcome(request):
         usernames.append(i.username)
         emails.append(i.email)
     
-    print(f'This is the usernames list {usernames}')
-    print(f'This is the emails list {emails}')
+
     
     return render(request, 'network/welcome.html',context={'TESTING':usernames, 'EMAILS':emails})
 
 def welcome2(request):
     posts = Post.objects.order_by('-post_date').all()
-    print(f'Post are: {posts}')
     paginator = Paginator(posts, MAX_POSTS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -341,7 +339,6 @@ def register(request):
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password, profile_image=profile_image,cover_image='/images/jaguar.jpg')
-            print(profile_image)
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
@@ -458,7 +455,6 @@ def testing(request):
     for i in userz:
         usernames.append(i.username)
     
-    print(f'This is the usernames list {usernames}')
 
     return render(request, 'network/testing.html',{'tes':usernames})
 
